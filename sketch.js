@@ -25,9 +25,9 @@ let modelInput, modelSelect, initializeModelButton, stopClassifyButton;
 let flipButton, switchCameraButton, connectBluetoothButton, disconnectBluetoothButton;
 
 const modelList = {
-  "✌🏻✊🏻🖐🏻 가위 바위 보 분류": "vOi4Y0yiK",
-  "🚗 속도 표지판 분류": "cTrp8ZF93",
-  "⬅️➡️ 방향 표지판 분류": "JX0oMMrn3"
+  "✌🏻✊🏻🖐🏻 Rock Paper Scissors": "vOi4Y0yiK",
+  "🚗 Speed Sign": "cTrp8ZF93",
+  "⬅️➡️ Direction Sign": "JX0oMMrn3"
 };
 
 let isSendingData = false;
@@ -74,7 +74,7 @@ function setupCamera() {
 
 function createUI() {
   // Camera control buttons
-  flipButton = createButton("↔️ 카메라 좌우 반전");
+  flipButton = createButton("↔️ Flip Camera");
   flipButton.parent('camera-control-buttons');
   flipButton.style('background', '#78B3FF');
   flipButton.style('color', 'white');
@@ -84,7 +84,7 @@ function createUI() {
   flipButton.style('cursor', 'pointer');
   flipButton.mousePressed(toggleFlip);
 
-  switchCameraButton = createButton("🔄 전후방 카메라 전환");
+  switchCameraButton = createButton("🔄 Switch Camera");
   switchCameraButton.parent('camera-control-buttons');
   switchCameraButton.style('background', '#78B3FF');
   switchCameraButton.style('color', 'white');
@@ -95,7 +95,7 @@ function createUI() {
   switchCameraButton.mousePressed(switchCamera);
 
   // Bluetooth control buttons
-  connectBluetoothButton = createButton("🔗 블루투스 연결");
+  connectBluetoothButton = createButton("🔗 Connect");
   connectBluetoothButton.parent('bluetooth-control-buttons');
   connectBluetoothButton.style('background', '#78B3FF');
   connectBluetoothButton.style('color', 'white');
@@ -105,7 +105,7 @@ function createUI() {
   connectBluetoothButton.style('cursor', 'pointer');
   connectBluetoothButton.mousePressed(connectBluetooth);
 
-  disconnectBluetoothButton = createButton("❌ 블루투스 연결 해제");
+  disconnectBluetoothButton = createButton("❌ Disconnect");
   disconnectBluetoothButton.parent('bluetooth-control-buttons');
   disconnectBluetoothButton.style('background', '#78B3FF');
   disconnectBluetoothButton.style('color', 'white');
@@ -118,7 +118,7 @@ function createUI() {
   // Model selection
   modelSelect = createSelect();
   modelSelect.parent('model-select-and-link');
-  modelSelect.option("모델을 선택하세요", "");
+  modelSelect.option("Select a model", "");
   for (const modelName in modelList) {
     modelSelect.option(modelName, modelList[modelName]);
   }
@@ -128,7 +128,7 @@ function createUI() {
   modelSelect.style('background', '#ecf0f1');
   modelSelect.style('color', '#2c3e50');
 
-  createA("https://boundaryx.io", "모델 분류 데이터 보기", "_blank")
+  createA("https://boundaryx.io", "View training data", "_blank")
     .parent('model-select-and-link')
     .style("color", "#78B3FF");
 
@@ -142,7 +142,7 @@ function createUI() {
   modelInput.style('color', '#2c3e50');
 
   // Model action buttons
-  initializeModelButton = createButton('🟢 모델 로드');
+  initializeModelButton = createButton('🟢 Load Model');
   initializeModelButton.parent('model-action-buttons');
   initializeModelButton.style('background', '#78B3FF');
   initializeModelButton.style('color', 'white');
@@ -152,7 +152,7 @@ function createUI() {
   initializeModelButton.style('cursor', 'pointer');
   initializeModelButton.mousePressed(initializeModel);
 
-  stopClassifyButton = createButton('🔴 분류 중지');
+  stopClassifyButton = createButton('🔴 Stop Classification');
   stopClassifyButton.parent('model-action-buttons');
   stopClassifyButton.style('background', '#78B3FF');
   stopClassifyButton.style('color', 'white');
@@ -229,7 +229,7 @@ function disconnectBluetooth() {
 
 function updateBluetoothStatus() {
   const statusElement = select('#bluetoothStatus');
-  statusElement.html(`상태: ${bluetoothStatus}`);
+  statusElement.html(`Status: ${bluetoothStatus}`);
   if (isConnected) {
     statusElement.style('background-color', '#d0f0fd');
     statusElement.style('color', '#FE818D');
@@ -272,7 +272,7 @@ async function sendBluetoothData(data) {
 function initializeModel() {
   const modelKey = modelInput.value().trim();
   if (!modelKey) {
-    alert('모델 키를 입력하세요!');
+    alert('Please enter a model key!');
     return;
   }
   const modelURL = `https://teachablemachine.withgoogle.com/models/${modelKey}/model.json`;
@@ -280,14 +280,14 @@ function initializeModel() {
 }
 
 function modelLoaded() {
-  console.log('모델 로드 완료');
+  console.log('Model loaded');
   label = "wait";
   startClassification();
 }
 
 function startClassification() {
   if (!classifier) {
-    console.error('모델이 로드되지 않았습니다.');
+    console.error('Model not loaded.');
     return;
   }
   isClassifying = true;
@@ -297,7 +297,7 @@ function startClassification() {
 function stopClassification() {
   isClassifying = false;
   label = "stop";
-  console.log('모델 분류 정지');
+  console.log('Classification stopped');
   sendBluetoothData("stop");
 }
 
@@ -308,7 +308,7 @@ function classifyVideo() {
 
 function gotResults(error, results) {
   if (error) {
-    console.error("분류 오류:", error);
+    console.error("Classification error:", error);
     return;
   }
   if (results && results.length > 0) {
@@ -326,7 +326,7 @@ function draw() {
     textAlign(CENTER, CENTER);
     textSize(24);
     fill(255);
-    text("카메라 로딩 중...", width / 2, height / 2);
+    text("Loading camera...", width / 2, height / 2);
     return;
   }
 
